@@ -769,7 +769,7 @@
         </div>
 
         <div class="label">お相手の生年月日<br>（例：西暦記載○年◯月◯日）<br>※相性を見る場合のみご記入下さい。</div>
-        <input type="text" id="birth" placeholder="生年月日を入力してください" oninput="saveInput('birth')">
+        <input type="text" id="youbirth" placeholder="生年月日を入力してください" oninput="saveInput('youbirth')">
 
         <div class="label">どちらがご希望ですか？</div>
         <div class="highschool-buttons">
@@ -1270,7 +1270,10 @@
         function submitForm() {
             const formData = {
                 name: document.getElementById('name').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
+                namehurigana: document.getElementById('namehurigana').value.trim(),
+                name: document.getElementById('name').value.trim(),
+                birth: document.getElementById('birth').value.trim(),
+                youbirth: document.getElementById('youbirth').value.trim(),
                 visitCount: visitCount,
                 highschoolCount: highschoolCount,
                 selectedSymptom: selectedSymptom && selectedSymptom.length > 0 ? selectedSymptom : null, // 空の選択肢をチェック
@@ -1298,17 +1301,22 @@
                 return;
             }
 
+            if (!formData.selectedSymptom) {
+                alert('メニューを選択してください。');
+                return;
+            }
+
             if (!formData.dates[0]) {
                 alert('第1希望日※必須を選択してください。');
                 return;
             }
 
-            if (!formData.dates[1]) {
+            if (!formData.dates[0]) {
                 alert('第1希望日※必須を選択してください。');
                 return;
             }
 
-            if (!formData.dates[2]) {
+            if (!formData.dates[0]) {
                 alert('第1希望日※必須を選択してください。');
                 return;
             }
@@ -1316,7 +1324,7 @@
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `【予約フォーム】\nお名前：${formData.name}\n\n電話番号：${formData.phone}\n\n性別：${formData.visitCount}\n\nどちらがご希望ですか？：${formData.highschoolCount}\n\n【希望日時】：\n・第一希望日\n${formatDate(formData.dates[0])}\n\n・第二希望日\n${formatDate(formData.dates[1])}\n\n・第三希望日\n${formatDate(formData.dates[2])}\n\nメッセージ：${formData.message}`
+                text: `【予約フォーム】\nお名前：${formData.name}\n\nお名前（フリガナ）\n${formData.namehurigana}\n\n電話番号：${formData.phone}\n\n性別：${formData.visitCount}\n\n電話番号：${formData.birth}\n\n電話番号：${formData.youbirth}\n\nどちらがご希望ですか？：${formData.highschoolCount}\n\n【希望日時】：\n・第一希望日\n${formatDate(formData.dates[0])}\n\n・第二希望日\n${formatDate(formData.dates[1])}\n\n・第三希望日\n${formatDate(formData.dates[2])}\n\nメッセージ：${formData.message}`
             }]).then(() => {
                 alert('当日キャンセルは無いようにお願いいたします。');
                 liff.closeWindow();
