@@ -836,7 +836,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             liff.init({
-                liffId: '2007386424-oWmWQb47'
+                liffId: '2005254357-zKma9BZk'
             }).then(() => {
                 console.log('LIFF初期化成功');
             }).catch((err) => {
@@ -1324,7 +1324,7 @@
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `【予約フォーム】\nお名前：${formData.name}\n\nお名前（フリガナ）\n${formData.namehurigana}\n\n電話番号：${formData.phone}\n\n性別：${formData.visitCount}\n\n電話番号：${formData.birth}\n\n電話番号：${formData.youbirth}\n\nどちらがご希望ですか？：${formData.highschoolCount}\n\n【希望日時】：\n・第一希望日\n${formatDate(formData.dates[0])}\n\n・第二希望日\n${formatDate(formData.dates[1])}\n\n・第三希望日\n${formatDate(formData.dates[2])}\n\nメッセージ：${formData.message}`
+                text: `【予約フォーム】\nお名前：${formData.name}\n\nお名前（フリガナ）\n${formData.namehurigana}\n\n電話番号：${formData.phone}\n\n性別：${formData.visitCount}\n\n生年月日：${formData.birth}\n\nお相手の生年月日\n${formData.youbirth}\n\nどちらがご希望ですか？：${formData.highschoolCount}\n\n【希望日時】：\n・第一希望日\n${formatDate(formData.dates[0])}\n\n・第二希望日\n${formatDate(formData.dates[1])}\n\n・第三希望日\n${formatDate(formData.dates[2])}\n\nメッセージ：${formData.message}`
             }]).then(() => {
                 alert('当日キャンセルは無いようにお願いいたします。');
                 liff.closeWindow();
