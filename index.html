@@ -1428,6 +1428,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
+            if (!formData.birth) {
+                alert('生年月日を入力してください。');
+                return;
+            }
+
+            if (!formData.visitCount) {
+                alert('性別を選択してください。');
+                return;
+            }
+
+            if (!formData.selectedMenu) {
+                alert('希望を選択してください。');
+                return;
+            }
+
             if (!formData.dates) {
                 alert('希望日時を選択してください。');
                 return;
@@ -1569,7 +1584,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const slotEnd = new Date(slotStart);
                     let menuDuration = selectedMenuTime || 10;
-                    let visitDuration = selectedVisitTime || 0;
+                    let visitDuration = selectedVisitTime || 60;
                     let irradiationsDuration = selectedirradiationsTime || 0;
 
                     // メニュー時間と訪問回数の時間を合計して、終了時間を設定
