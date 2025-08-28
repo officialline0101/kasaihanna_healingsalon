@@ -1583,7 +1583,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     slotStart.setHours(parseInt(times[j].split(':')[0]), parseInt(times[j].split(':')[1]), 0, 0);
 
                     const slotEnd = new Date(slotStart);
-                    let menuDuration = selectedMenuTime || 10;
+                    let menuDuration = selectedMenuTime || 0;
                     let visitDuration = selectedVisitTime || 60;
                     let irradiationsDuration = selectedirradiationsTime || 0;
 
