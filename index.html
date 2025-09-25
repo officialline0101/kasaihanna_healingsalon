@@ -831,6 +831,11 @@
             <button type="button" onclick="showMenu('female')">オンライン</button>
         </div>
 
+        <div id="female" class="menu-section">
+        <div class="label">メールアドレス<span class="required">必須</span></div>
+        <input type="text" id="gmail" placeholder="メールアドレスを入力してください" oninput="saveInput('gmail')">
+            </div>
+
         <div id="treatment-text" style="display: none; margin-bottom: 10px;"></div>
 
         <div class="label">希望日時<span class="required">必須</span></div>
@@ -914,7 +919,7 @@
 
         // 訪問回数ごとの時間設定 (例：初めて=20分、2回目以降=15分)
         let visitTimes = {
-            '1回目〈30分〉': 30,
+            '1回目〈30分〉': 0,
             '2回目以降〈0分〉': 0
         };
 
@@ -922,28 +927,14 @@
 
         // 訪問回数ごとの時間設定 (例：初めて=20分、2回目以降=15分)
         let irradiationsTimes = {
-            '眉カット〈30分〉': 30,
-            '襟足〈30分〉': 30,
-            '背中(キャミソールライン)〈30分〉': 30,
-            '背中(腰まで)〈30分〉': 30,
-            'デコルテ〈30分〉': 30,
-            '腕〈30分〉': 30,
-            '保湿パック〈30分〉': 30,
-            'ベーシックマッサージ〈30分〉': 30,
-            'リラックスマッサージ〈30分〉': 30,
-            '美白パック〈30分〉': 30
+            '眉カット〈30分〉': 0
         };
 
         let selectedirradiationsTime = 0; // 訪問回数で選択された時間
 
         let menuTimes = {
-            '和装プラン〈30分〉': 30,
-            '洋装プランA〈60分〉': 60,
-            '洋装プランB〈120分〉': 420,
-            '洋装プランC〈30分〉': 30,
-            'リラックスコース〈60分〉': 60,
-            'ベーシックコース〈30分〉': 30,
-            'スピードコース〈90分〉': 90
+            '対面': 60,
+            'オンライン': 60,
         };
 
         let selectedMenuTime = 0;
@@ -1399,68 +1390,76 @@ document.addEventListener("DOMContentLoaded", () => {
             updateDisplayInfo();
         }
 
-        function submitForm() {
-            const formData = {
-                name: document.getElementById('name').value.trim(),
-                namehurigana: document.getElementById('namehurigana').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
-                birth: document.getElementById('birth').value.trim(),
-                youbirth: document.getElementById('youbirth').value.trim(),
-                visitCount: visitCount,
-                selectedMenu: selectedMenu,
-                dates: selectedFullDate ? [selectedFullDate] : null, // 空チェック
-                message: document.getElementById('message').value.trim()
-            };
+function submitForm() {
+    const formData = {
+        name: document.getElementById('name').value.trim(),
+        namehurigana: document.getElementById('namehurigana').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        gmail: document.getElementById('gmail').value.trim(),
+        birth: document.getElementById('birth').value.trim(),
+        youbirth: document.getElementById('youbirth').value.trim(),
+        visitCount: visitCount,
+        selectedMenu: selectedMenu,
+        dates: selectedFullDate ? [selectedFullDate] : null, // 空チェック
+        message: document.getElementById('message').value.trim()
+    };
 
-            // フォームデータのチェック
-            if (!formData.name) {
-                alert('（フルネーム/漢字）を入力してください。');
-                return;
-            }
+    // フォームデータのチェック
+    if (!formData.name) {
+        alert('（フルネーム/漢字）を入力してください。');
+        return;
+    }
+    if (!formData.namehurigana) {
+        alert('（フルネーム/ふりがな）を入力してください。');
+        return;
+    }
+    if (!formData.phone) {
+        alert('電話番号を入力してください。');
+        return;
+    }
+    if (!formData.birth) {
+        alert('生年月日を入力してください。');
+        return;
+    }
+    if (!formData.visitCount) {
+        alert('性別を選択してください。');
+        return;
+    }
+    if (!formData.selectedMenu) {
+        alert('希望を選択してください。');
+        return;
+    }
+    if (!formData.dates) {
+        alert('希望日時を選択してください。');
+        return;
+    }
 
-            if (!formData.namehurigana) {
-                alert('（フルネーム/ふりがな）を入力してください。');
-                return;
-            }
+    // gmailが空なら行を入れない
+    const gmailLine = formData.gmail ? `\nメールアドレス：${formData.gmail}` : '';
 
-            if (!formData.phone) {
-                alert('電話番号を入力してください。');
-                return;
-            }
+    const messageText =
+        `【予約フォーム】\n` +
+        `お名前：${formData.name}\n` +
+        `お名前（フリガナ）：${formData.namehurigana}\n` +
+        `電話番号：${formData.phone}\n` +
+        `生年月日：${formData.birth}\n` +
+        `性別：${formData.visitCount}\n` +
+        `お相手の生年月日：${formData.youbirth}\n` +
+        `どちらがご希望ですか？：${formData.selectedMenu}` +
+        `${gmailLine}\n` +
+        `希望日時：\n ${formData.dates[0]}\n` +
+        `メッセージ：${formData.message}`;
 
-            if (!formData.birth) {
-                alert('生年月日を入力してください。');
-                return;
-            }
-
-            if (!formData.visitCount) {
-                alert('性別を選択してください。');
-                return;
-            }
-
-            if (!formData.selectedMenu) {
-                alert('希望を選択してください。');
-                return;
-            }
-
-            if (!formData.dates) {
-                alert('希望日時を選択してください。');
-                return;
-            }
-
-            // LINEトークにメッセージを送信
-            liff.sendMessages([{
-                type: 'text',
-                text: `【予約フォーム】\nお名前：${formData.name}\nお名前（フリガナ）：${formData.namehurigana}\n電話番号：${formData.phone}\n生年月日：${formData.birth}\n性別：${formData.visitCount}\nお相手の生年月日：${formData.youbirth}\nどちらがご希望ですか？：${formData.selectedMenu}\n希望日時：\n ${formData.dates[0]}\nメッセージ：${formData.message}`
-            }]).then(() => {
-                /* メッセージ送信成功時の処理 */
-                alert('当日キャンセルは無いようにお願いいたします。');
-                /* LIFFウィンドウを閉じる */
-                liff.closeWindow();
-            }).catch((err) => {
-                /* メッセージ送信失敗時の処理 */
-                console.error('メッセージの送信に失敗しました', err);
-            });
+    // LINEトークにメッセージを送信
+    liff.sendMessages([{
+        type: 'text',
+        text: messageText
+    }]).then(() => {
+        alert('当日キャンセルは無いようにお願いいたします。');
+        liff.closeWindow();
+    }).catch((err) => {
+        console.error('メッセージの送信に失敗しました', err);
+    });
         }
 
         function formatDate(dateStr) {
@@ -1592,6 +1591,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     // 終了時間が翌日 (0時以降) になる場合は✕に設定
                     if (slotEnd.getDate() !== slotStart.getDate()) {
+                        cell.textContent = '✕';
+                        cell.classList.add('unavailable');
+                        continue;
+                    }
+
+                    // 18時以降に終了する予約を不可にする (17:30は可)
+                    if (slotEnd.getHours() === 19 && slotEnd.getMinutes() > 0) {
+                        cell.textContent = '✕';
+                        cell.classList.add('unavailable');
+                        continue;
+                    } else if (slotEnd.getHours() > 19) {
                         cell.textContent = '✕';
                         cell.classList.add('unavailable');
                         continue;
