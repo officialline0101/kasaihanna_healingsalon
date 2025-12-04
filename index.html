@@ -795,7 +795,7 @@
     </div>
 
     <div class="container">
-        <h1>華彩ハンナヒーリングサロン<br>予約フォーム
+        <h1>華彩ハンナヒーリングサロン<br>占い予約フォーム
         </h1>
 
         <div class="label">お名前（フルネーム/漢字）<span class="required">必須</span></div>
@@ -1432,7 +1432,8 @@ function submitForm() {
     const gmailLine = formData.gmail ? `\nメールアドレス：${formData.gmail}` : '';
 
     const messageText =
-        `【予約フォーム】\n` +
+        `【占い予約フォーム】\n` +
+        `予約：占い\n` +
         `お名前：${formData.name}\n` +
         `お名前（フリガナ）：${formData.namehurigana}\n` +
         `電話番号：${formData.phone}\n` +
